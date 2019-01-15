@@ -1,5 +1,7 @@
 {
   "name": "ionic4-wordpress",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

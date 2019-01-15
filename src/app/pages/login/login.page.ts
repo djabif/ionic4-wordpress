@@ -1,0 +1,70 @@
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { WordpressService } from '../../services/wordpress.service';
+import { AuthenticationService } from '../../services/authentication.service';
+import { LoadingController } from '@ionic/angular';
+
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.page.html',
+  styleUrls: ['./login.page.scss'],
+})
+export class LoginPage implements OnInit {
+
+  login_form: FormGroup;
+  error_message: string;
+
+  constructor(
+    private router: Router,
+    public loadingController: LoadingController,
+    public formBuilder: FormBuilder,
+    public wordpressService: WordpressService,
+    public authenticationService: AuthenticationService
+  ) {}
+
+  ngOnInit() {
+    this.login_form = this.formBuilder.group({
+      username: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      password: new FormControl('', Validators.required)
+    });
+  }
+
+  async login(value){
+    const loading = await this.loadingController.create({
+      message: 'Please wait...'
+    });
+    return await loading.present();
+    debugger
+
+    this.authenticationService.doLogin(value.username, value.password)
+    .subscribe(res => {
+      debugger
+       // this.authenticationService.setUser({
+       //   token: res.json().token,
+       //   username: value.username,
+       //   displayname: res.json().user_display_name,
+       //   email: res.json().user_email
+       // });
+
+       loading.dismiss();
+       this.router.navigate(['/home']);
+     },
+     err => {
+       loading.dismiss();
+       this.error_message = "Invalid credentials. Try with username 'aa' password 'aa'.";
+       console.log(err);
+     })
+  }
+
+  skipLogin(){
+    this.router.navigate(['/home']);
+  }
+
+  goToRegister(){
+    this.router.navigate(['/register']);
+  }
+
+}
