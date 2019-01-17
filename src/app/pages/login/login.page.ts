@@ -33,22 +33,20 @@ export class LoginPage implements OnInit {
   }
 
   async login(value){
+    debugger
     const loading = await this.loadingController.create({
       message: 'Please wait...'
     });
-    return await loading.present();
-    debugger
-
+    await loading.present();
     this.authenticationService.doLogin(value.username, value.password)
     .subscribe(res => {
       debugger
-       // this.authenticationService.setUser({
-       //   token: res.json().token,
-       //   username: value.username,
-       //   displayname: res.json().user_display_name,
-       //   email: res.json().user_email
-       // });
-
+       this.authenticationService.setUser({
+         token: res['token'],
+         username: value.username,
+         displayname: res['user_display_name'],
+         email: res['user_email']
+       });
        loading.dismiss();
        this.router.navigate(['/home']);
      },

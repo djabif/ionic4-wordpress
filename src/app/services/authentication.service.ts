@@ -34,7 +34,9 @@ export class AuthenticationService {
   }
 
   doRegister(user_data, token){
-    return this.http.post(Config.WORDPRESS_REST_API_URL + 'users?token=' + token, user_data);
+    let header: HttpHeaders;
+		header = new HttpHeaders({ "Authorization": "Bearer " + token });
+    return this.http.post(Config.WORDPRESS_REST_API_URL + 'users', user_data, {headers:header});
   }
 
   validateAuthToken(token){

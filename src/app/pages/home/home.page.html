@@ -1,9 +1,46 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>home</ion-title>
+    <ion-title *ngIf="!categoryTitle">Recent posts</ion-title>
+    <ion-title *ngIf="categoryTitle">{{categoryTitle}} posts</ion-title>
+    <ion-buttons *ngIf="loggedUser" slot="end">
+      <ion-button (click)="logOut()">
+        <ion-icon class="toolbar-icon" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons *ngIf="!loggedUser" slot="end">
+      <ion-button (click)="logOut()">
+        <ion-icon class="toolbar-icon" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-
+<ion-content class="content">
+  <ion-card *ngFor="let post of posts" >
+    <ion-card-header>
+      <ion-card-title [innerHTML]="post.title.rendered"></ion-card-title>
+    </ion-card-header>
+    <ion-card-content >
+      <p [innerHTML]="post.excerpt.rendered"></p>
+    </ion-card-content>
+    <ion-row no-padding>
+       <ion-col>
+         <ion-button fill="clear" size="small" color="primary" icon-start>
+           {{post.date.split('T')[0]}}
+         </ion-button>
+       </ion-col>
+       <ion-col text-right>
+         <ion-button  size="small" color="primary" (click)="postTapped($event, post)" icon-start>
+            Read More
+         </ion-button>
+       </ion-col>
+     </ion-row>
+  </ion-card>
+  <!-- <ion-infinite-scroll [disabled]="!morePagesAvailable" (ionInfinite)="doInfinite($event)"> -->
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content
+    loadingSpinner="bubbles"
+    loadingText="Loading more posts ...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

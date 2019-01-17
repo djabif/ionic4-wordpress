@@ -11,7 +11,7 @@ import { LoadingController } from '@ionic/angular';
 export class HomePage implements OnInit {
 
   posts: Array<any> = new Array<any>();
-  morePagesAvailable: boolean = true;
+  // morePagesAvailable: boolean = true;
   loggedUser: boolean = false;
 
   categoryId: number;
@@ -29,7 +29,7 @@ export class HomePage implements OnInit {
       data => this.loggedUser = true,
       error => this.loggedUser = false
     );
-    this.morePagesAvailable = true;
+    // this.morePagesAvailable = true;
 
     //if we are browsing a category
     // this.categoryId = this.navParams.get('id');
@@ -39,15 +39,15 @@ export class HomePage implements OnInit {
       const loading = await this.loadingController.create({
         message: 'Please wait...'
       });
-      return await loading.present();
+      await loading.present();
 
       this.wordpressService.getRecentPosts(this.categoryId)
       .subscribe(data => {
         debugger
-        // for(let post of data){
-        //   post.excerpt.rendered = post.excerpt.rendered.split('<a')[0] + "</p>";
-        //   this.posts.push(post);
-        // }
+        for(let post of data){
+          post.excerpt.rendered = post.excerpt.rendered.split('<a')[0] + "</p>";
+          this.posts.push(post);
+        }
         loading.dismiss();
       });
     }
@@ -60,22 +60,23 @@ export class HomePage implements OnInit {
   }
 
   doInfinite(infiniteScroll) {
-    // let page = (Math.ceil(this.posts.length/10)) + 1;
-    // let loading = true;
-    //
-    // this.wordpressService.getRecentPosts(this.categoryId, page)
-    // .subscribe(data => {
-    //   for(let post of data){
-    //     if(!loading){
-    //       infiniteScroll.complete();
-    //     }
-    //     post.excerpt.rendered = post.excerpt.rendered.split('<a')[0] + "</p>";
-    //     this.posts.push(post);
-    //     loading = false;
-    //   }
-    // }, err => {
-    //   this.morePagesAvailable = false;
-    // })
+    let page = (Math.ceil(this.posts.length/10)) + 1;
+    let loading = true;
+
+    this.wordpressService.getRecentPosts(this.categoryId, page)
+    .subscribe(data => {
+      for(let post of data){
+        if(!loading){
+          infiniteScroll.target.complete();
+        }
+        post.excerpt.rendered = post.excerpt.rendered.split('<a')[0] + "</p>";
+        this.posts.push(post);
+        loading = false;
+      }
+    }, err => {
+      // this.morePagesAvailable = false;
+      infiniteScroll.target.disabled = true;
+    })
   }
 
   logOut(){

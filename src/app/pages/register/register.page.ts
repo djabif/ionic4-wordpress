@@ -28,32 +28,32 @@ export class RegisterPage implements OnInit {
   }
 
   onSubmit(values){
-    // var username: 'aa'; // this should be an administrator Username
-    // var password: 'aa'; // this should be an administrator Password
-    // //only authenticated administrators can create users
-    // this.authenticationService.doLogin(username, password)
-    // .subscribe(
-    //   res => {
-    //     let user_data = {
-    //       username: values.username,
-    //       name: values.displayName,
-    //       email: values.email,
-    //       password: values.password
-    //     };
-    //     this.authenticationService.doRegister(user_data, res.json().token)
-    //     .subscribe(
-    //       result => {
-    //         console.log(result);
-    //       },
-    //       error => {
-    //         console.log(error);
-    //       }
-    //     );
-    //   },
-    //   err => {
-    //     console.log(err);
-    //   }
-    // )
+    var username = 'envato@startapplabs.com'; // this should be an administrator Username
+    var password = 'KeepShipping!'; // this should be an administrator Password
+    //only authenticated administrators can create users
+    this.authenticationService.doLogin(username, password)
+    .subscribe(
+      res => {
+        let user_data = {
+          username: values.username,
+          name: values.displayName,
+          email: values.email,
+          password: values.password
+        };
+        this.authenticationService.doRegister(user_data, res['token'])
+        .subscribe(
+          result => {
+            console.log(result);
+          },
+          error => {
+            console.log(error);
+          }
+        );
+      },
+      err => {
+        console.log(err);
+      }
+    )
   }
 
 }
