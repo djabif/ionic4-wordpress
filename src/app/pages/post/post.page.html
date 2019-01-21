@@ -5,5 +5,45 @@
 </ion-header>
 
 <ion-content padding>
-
+  <div *ngIf="post" class="post">
+    <div class="post-title" [innerHTML]="post.title.rendered"></div>
+    <p class="post-content" [innerHTML]="post.content.rendered"></p>
+    <ion-row>
+      <ion-col>
+        <ion-icon name='md-calendar'></ion-icon>
+        {{post.date.split('T')[0]}}
+      </ion-col>
+      <ion-col text-right>
+        <ion-icon name="person"></ion-icon>
+        {{user}}
+      </ion-col>
+    </ion-row>
+    <p class="bold-title">Categories:</p>
+    <ion-grid>
+      <ion-row>
+        <ion-col class="category-col" *ngFor="let category of categories">
+          <ion-badge (click)="goToCategoryPosts(category.id, category.name)">{{category.name}}</ion-badge>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <p class="bold-title">Comments:</p>
+    <ion-item *ngFor="let comment of comments">
+      <ion-avatar item-start>
+        <img src="{{comment.author_avatar_urls[24]}}">
+      </ion-avatar>
+      <h2>{{comment.author_name}}</h2>
+      <p [innerHTML]="comment.content.rendered"></p>
+    </ion-item>
+    <ion-infinite-scroll (ionInfinite)="loadMoreComments($event)">
+      <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more comments...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+ </div>
 </ion-content>
+<ion-footer>
+ <ion-toolbar>
+  <button ion-button block (click)="createComment()">Add a Comment</button>
+ </ion-toolbar>
+</ion-footer>

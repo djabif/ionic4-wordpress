@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { WordpressService } from '../../services/wordpress.service';
 import { AuthenticationService } from '../../services/authentication.service';
 import { LoadingController } from '@ionic/angular';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +20,8 @@ export class HomePage implements OnInit {
 
   constructor(
     public loadingController: LoadingController,
+    private router: Router,
+    private route: ActivatedRoute,
     public wordpressService: WordpressService,
     public authenticationService: AuthenticationService
   ) {}
@@ -43,8 +46,8 @@ export class HomePage implements OnInit {
 
       this.wordpressService.getRecentPosts(this.categoryId)
       .subscribe(data => {
-        debugger
-        for(let post of data){
+        const recentPosts = Object.keys(data).map(i => data[i]);
+        for(let post of recentPosts){
           post.excerpt.rendered = post.excerpt.rendered.split('<a')[0] + "</p>";
           this.posts.push(post);
         }
@@ -57,6 +60,7 @@ export class HomePage implements OnInit {
 		// this.navCtrl.push(PostPage, {
 		//   item: post
 		// });
+    this.router.navigate(['/post', post])
   }
 
   doInfinite(infiniteScroll) {
@@ -65,7 +69,8 @@ export class HomePage implements OnInit {
 
     this.wordpressService.getRecentPosts(this.categoryId, page)
     .subscribe(data => {
-      for(let post of data){
+      const recentPosts = Object.keys(data).map(i => data[i]);
+      for(let post of recentPosts){
         if(!loading){
           infiniteScroll.target.complete();
         }
@@ -80,15 +85,15 @@ export class HomePage implements OnInit {
   }
 
   logOut(){
-    // this.authenticationService.logOut()
-    // .then(
-    //   res => this.navCtrl.push(LoginPage),
-    //   err => console.log('Error in log out')
-    // )
+    this.authenticationService.logOut()
+    .then(
+      res => this.router.navigate(['/login']),
+      err => console.log('Error in log out')
+    )
   }
 
   goToLogin(){
-    // this.navCtrl.push(LoginPage);
+    this.router.navigate(['/login']);
   }
 
 }

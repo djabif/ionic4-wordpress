@@ -33,14 +33,12 @@ export class LoginPage implements OnInit {
   }
 
   async login(value){
-    debugger
     const loading = await this.loadingController.create({
       message: 'Please wait...'
     });
     await loading.present();
     this.authenticationService.doLogin(value.username, value.password)
     .subscribe(res => {
-      debugger
        this.authenticationService.setUser({
          token: res['token'],
          username: value.username,

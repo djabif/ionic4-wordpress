@@ -21,11 +21,10 @@ export class WordpressService {
   }
 
   getComments(postId:number, page:number = 1){
-    // return this.http.get(
-    //   Config.WORDPRESS_REST_API_URL
-    //   + "comments?post=" + postId
-    //   + '&page=' + page)
-    // .subscribe(res => res.json());
+    return this.http.get(
+      Config.WORDPRESS_REST_API_URL
+      + "comments?post=" + postId
+      + '&page=' + page)
   }
 
   getAuthor(author){
