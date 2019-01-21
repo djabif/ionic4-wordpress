@@ -45,15 +45,16 @@ export class PostPage implements OnInit {
 
         forkJoin([
           this.getAuthorData(),
-          this.getCategories(),
-          this.getComments()])
-          .pipe( map(([first, second, third]) => {
-            debugger
-            // this.user = data[0].name;
-            // this.categories = data[1];
-            // this.comments = data[2];
-            loading.dismiss();
-          }));
+          // this.getCategories(),
+          this.getComments()
+        ])
+        .subscribe(data => {
+          debugger
+          // this.user = data[0].name;
+          // this.categories = data[1];
+          // this.comments = data[2];
+          loading.dismiss();
+          });
       }
     )
   }
@@ -62,9 +63,9 @@ export class PostPage implements OnInit {
     return this.wordpressService.getAuthor(this.post.author);
   }
 
-  getCategories(){
-    return this.wordpressService.getPostCategories(this.post);
-  }
+  // getCategories(){
+  //   return this.wordpressService.getPostCategories(this.post);
+  // }
 
   getComments(){
     return this.wordpressService.getComments(this.post.id);

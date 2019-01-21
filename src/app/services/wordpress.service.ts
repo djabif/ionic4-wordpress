@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { forkJoin } from 'rxjs';
 import * as Config from '../../config';
 
 @Injectable({
@@ -28,23 +29,21 @@ export class WordpressService {
   }
 
   getAuthor(author){
-    // return this.http.get(Config.WORDPRESS_REST_API_URL + "users/" + author)
-    // .subscribe(res => res.json());
+    return this.http.get(Config.WORDPRESS_REST_API_URL + "users/" + author)
   }
 
-  getPostCategories(post){
-    // let observableBatch = [];
-    //
-    // post.categories.forEach(category => {
-    //   observableBatch.push(this.getCategory(category));
-    // });
-    //
-    // return Observable.forkJoin(observableBatch);
-  }
+  // getPostCategories(post){
+  //   let observableBatch = [];
+  //
+  //   post.categories.forEach(category => {
+  //     observableBatch.push(this.getCategory(category));
+  //   });
+  //
+  //   return forkJoin(observableBatch);
+  // }
 
   getCategory(category){
-    // return this.http.get(Config.WORDPRESS_REST_API_URL + "categories/" + category)
-    // .subscribe(res => res.json());
+    return this.http.get(Config.WORDPRESS_REST_API_URL + "categories/" + category)
   }
 
   createComment(postId, user, comment){
