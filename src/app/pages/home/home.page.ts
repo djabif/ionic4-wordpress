@@ -35,6 +35,12 @@ export class HomePage implements OnInit {
     // this.morePagesAvailable = true;
 
     //if we are browsing a category
+    this.route.params.subscribe(
+      param => {
+        this.categoryId = param.id;
+        this.categoryTitle = param.title;
+      }
+    )
     // this.categoryId = this.navParams.get('id');
     // this.categoryTitle = this.navParams.get('title');
 
@@ -56,11 +62,11 @@ export class HomePage implements OnInit {
     }
   }
 
-  postTapped(event, post) {
+  postTapped(event, postId) {
 		// this.navCtrl.push(PostPage, {
 		//   item: post
 		// });
-    this.router.navigate(['/post', post])
+    this.router.navigate(['/post', {id: postId}])
   }
 
   doInfinite(infiniteScroll) {

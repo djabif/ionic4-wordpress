@@ -1,6 +1,9 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>post</ion-title>
+    <ion-title>Post</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -44,6 +47,6 @@
 </ion-content>
 <ion-footer>
  <ion-toolbar>
-  <button ion-button block (click)="createComment()">Add a Comment</button>
+  <ion-button expand="block" (click)="createComment()">Add a Comment</ion-button>
  </ion-toolbar>
 </ion-footer>

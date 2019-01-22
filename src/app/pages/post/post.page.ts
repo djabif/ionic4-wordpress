@@ -40,21 +40,28 @@ export class PostPage implements OnInit {
     // this.post = this.navParams.get('item');
     this.route.params.subscribe(
       param => {
-        debugger
-        this.post = param;
 
-        forkJoin([
-          this.getAuthorData(),
-          // this.getCategories(),
-          this.getComments()
-        ])
-        .subscribe(data => {
-          debugger
-          // this.user = data[0].name;
-          // this.categories = data[1];
-          // this.comments = data[2];
-          loading.dismiss();
-          });
+        this.wordpressService.getPost(param.id)
+        .subscribe( post =>{
+          this.post = post;
+
+          forkJoin([
+            this.getAuthorData(),
+            this.getCategories(),
+            this.getComments()
+          ])
+          .subscribe(data => {
+
+            const recentComments = Object.keys(data[2]).map(i => data[2][i]);
+            // const recentPosts = Object.keys(data).map(i => data[i]);
+            this.user = data[0]['name'];
+            this.categories = data[1];
+            this.comments = recentComments;
+            loading.dismiss();
+            });
+        })
+
+
       }
     )
   }
@@ -63,9 +70,9 @@ export class PostPage implements OnInit {
     return this.wordpressService.getAuthor(this.post.author);
   }
 
-  // getCategories(){
-  //   return this.wordpressService.getPostCategories(this.post);
-  // }
+  getCategories(){
+    return this.wordpressService.getPostCategories(this.post);
+  }
 
   getComments(){
     return this.wordpressService.getComments(this.post.id);
@@ -87,24 +94,30 @@ export class PostPage implements OnInit {
   }
 
   goToCategoryPosts(categoryId, categoryTitle){
+    this.router.navigate(['/home', {
+      id: categoryId,
+      title: categoryTitle
+    }])
     // this.navCtrl.push(HomePage, {
     //   id: categoryId,
     //   title: categoryTitle
     // })
   }
 
-  createComment(){
+  async createComment(){
     // let user: any;
     //
-    // this.authenticationService.getUser()
+    // await this.authenticationService.getUser()
     // .then(res => {
+    //   debugger
     //   user = res;
     //
-    //   let alert = this.alertCtrl.create({
-    //   title: 'Add a comment',
+    //   const alert = this.alertController.create({
+    //   header: 'Add a comment',
     //   inputs: [
     //     {
     //       name: 'comment',
+    //       type: 'text',
     //       placeholder: 'Comment'
     //     }
     //   ],
@@ -119,7 +132,7 @@ export class PostPage implements OnInit {
     //     {
     //       text: 'Accept',
     //       handler: data => {
-    //         let loading = this.loadingCtrl.create();
+    //         const loading = this.loadingController.create();
     //         loading.present();
     //         this.wordpressService.createComment(this.post.id, user, data.comment)
     //         .subscribe(
@@ -137,10 +150,10 @@ export class PostPage implements OnInit {
     //     }
     //   ]
     // });
-    // alert.present();
+    // await alert.present();
     // },
     // err => {
-    //   let alert = this.alertCtrl.create({
+    //   const alert = this.alertController.create({
     //     title: 'Please login',
     //     message: 'You need to login in order to comment',
     //     buttons: [
@@ -154,12 +167,12 @@ export class PostPage implements OnInit {
     //       {
     //         text: 'Login',
     //         handler: () => {
-    //           this.navCtrl.push(LoginPage);
+    //           this.router.navigate('/login');
     //         }
     //       }
     //     ]
     //   });
-    // alert.present();
+    // await alert.present();
     // });
   }
 

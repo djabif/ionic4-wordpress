@@ -14,7 +14,7 @@ export class AuthenticationService {
     public http: HttpClient
   ){}
 
-  getUser(){
+  async getUser(){
     return this.nativeStorage.getItem('User');
   }
 
