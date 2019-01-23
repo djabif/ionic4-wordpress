@@ -41,8 +41,6 @@ export class HomePage implements OnInit {
         this.categoryTitle = param.title;
       }
     )
-    // this.categoryId = this.navParams.get('id');
-    // this.categoryTitle = this.navParams.get('title');
 
     if(!(this.posts.length > 0)){
       const loading = await this.loadingController.create({
@@ -63,9 +61,6 @@ export class HomePage implements OnInit {
   }
 
   postTapped(event, postId) {
-		// this.navCtrl.push(PostPage, {
-		//   item: post
-		// });
     this.router.navigate(['/post', {id: postId}])
   }
 

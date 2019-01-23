@@ -98,82 +98,81 @@ export class PostPage implements OnInit {
       id: categoryId,
       title: categoryTitle
     }])
-    // this.navCtrl.push(HomePage, {
-    //   id: categoryId,
-    //   title: categoryTitle
-    // })
   }
 
   async createComment(){
-    // let user: any;
-    //
-    // await this.authenticationService.getUser()
-    // .then(res => {
-    //   debugger
-    //   user = res;
-    //
-    //   const alert = this.alertController.create({
-    //   header: 'Add a comment',
-    //   inputs: [
-    //     {
-    //       name: 'comment',
-    //       type: 'text',
-    //       placeholder: 'Comment'
-    //     }
-    //   ],
-    //   buttons: [
-    //     {
-    //       text: 'Cancel',
-    //       role: 'cancel',
-    //       handler: data => {
-    //         console.log('Cancel clicked');
-    //       }
-    //     },
-    //     {
-    //       text: 'Accept',
-    //       handler: data => {
-    //         const loading = this.loadingController.create();
-    //         loading.present();
-    //         this.wordpressService.createComment(this.post.id, user, data.comment)
-    //         .subscribe(
-    //           (data) => {
-    //             console.log("ok", data);
-    //             this.getComments();
-    //             loading.dismiss();
-    //           },
-    //           (err) => {
-    //             console.log("err", err);
-    //             loading.dismiss();
-    //           }
-    //         );
-    //       }
-    //     }
-    //   ]
-    // });
-    // await alert.present();
-    // },
-    // err => {
-    //   const alert = this.alertController.create({
-    //     title: 'Please login',
-    //     message: 'You need to login in order to comment',
-    //     buttons: [
-    //       {
-    //         text: 'Cancel',
-    //         role: 'cancel',
-    //         handler: () => {
-    //           console.log('Cancel clicked');
-    //         }
-    //       },
-    //       {
-    //         text: 'Login',
-    //         handler: () => {
-    //           this.router.navigate('/login');
-    //         }
-    //       }
-    //     ]
-    //   });
-    // await alert.present();
-    // });
+    let user: any;
+
+    await this.authenticationService.getUser()
+    .then( async res => {
+      debugger
+      user = res;
+
+      const alert = await this.alertController.create({
+      header: 'Add a comment',
+      inputs: [
+        {
+          name: 'comment',
+          type: 'text',
+          placeholder: 'Comment'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Accept',
+          handler: async data => {
+            const loading = await this.loadingController.create();
+            await loading.present();
+            this.wordpressService.createComment(this.post.id, user, data.comment)
+            .subscribe(
+              async (data) => {
+                console.log("ok", data);
+                this.getComments().subscribe( async comments =>{
+                  const recentComments = Object.keys(comments).map(i => comments[i]);
+                  this.comments = recentComments;
+                  await loading.dismiss();
+                });
+              },
+              async (err) => {
+                console.log("err", err);
+                await loading.dismiss();
+              }
+            );
+          }
+        }
+      ]
+    });
+    await alert.present();
+    },
+    async err => {
+      const alert = await this.alertController.create({
+        header: 'Please login',
+        message: 'You need to login in order to comment',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+          },
+          {
+            text: 'Login',
+            handler: () => {
+              this.router.navigate(['/login']);
+            }
+          }
+        ]
+      });
+    await alert.present();
+    });
   }
 
 }
