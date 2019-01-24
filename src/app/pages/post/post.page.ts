@@ -105,7 +105,6 @@ export class PostPage implements OnInit {
 
     await this.authenticationService.getUser()
     .then( async res => {
-      debugger
       user = res;
 
       const alert = await this.alertController.create({

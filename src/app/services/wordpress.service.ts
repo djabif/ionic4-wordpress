@@ -17,7 +17,6 @@ export class WordpressService {
   }
 
   getRecentPosts(categoryId:number, page:number = 1){
-    debugger
     //if we want to query posts by category
     let category_url = categoryId? ("&categories=" + categoryId): "";
 
@@ -40,8 +39,6 @@ export class WordpressService {
 
   getPostCategories(post){
     let observableBatch = [];
-    debugger
-    // let categories = post.categories.split(',');
     post.categories.forEach(category => {
       observableBatch.push(this.getCategory(category));
     });
@@ -55,7 +52,6 @@ export class WordpressService {
 
   createComment(postId, user, comment){
     let header: HttpHeaders = new HttpHeaders().append('Authorization', 'Bearer ' + user.token);
-    debugger
     return this.http.post(Config.WORDPRESS_REST_API_URL + "comments?token=" + user.token, {
       author_name: user.displayname,
       author_email: user.email,

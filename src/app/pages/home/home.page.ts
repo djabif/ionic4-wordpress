@@ -12,7 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class HomePage implements OnInit {
 
   posts: Array<any> = new Array<any>();
-  // morePagesAvailable: boolean = true;
+
   loggedUser: boolean = false;
 
   categoryId: number;
@@ -32,7 +32,6 @@ export class HomePage implements OnInit {
       data => this.loggedUser = true,
       error => this.loggedUser = false
     );
-    // this.morePagesAvailable = true;
 
     //if we are browsing a category
     this.route.params.subscribe(
