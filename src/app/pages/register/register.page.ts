@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { WordpressService } from '../../services/wordpress.service';
 import { AuthenticationService } from '../../services/authentication.service';
+import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-register',
@@ -11,11 +13,14 @@ import { AuthenticationService } from '../../services/authentication.service';
 export class RegisterPage implements OnInit {
 
   register_form: FormGroup;
+  error_message: string;
 
   constructor(
+    private router: Router,
     public formBuilder: FormBuilder,
     public wordpressService: WordpressService,
-    public authenticationService: AuthenticationService
+    public authenticationService: AuthenticationService,
+    public toastController: ToastController
   ) {}
 
   ngOnInit() {
@@ -42,11 +47,16 @@ export class RegisterPage implements OnInit {
         };
         this.authenticationService.doRegister(user_data, res['token'])
         .subscribe(
-          result => {
-            console.log(result);
+          async result => {
+            const toast = await this.toastController.create({
+              message: 'Your user have been register, please log in!.',
+              duration: 3000
+            });
+            toast.present();
+            this.router.navigate(['/login']);
           },
           error => {
-            console.log(error);
+            this.error_message = error.error.message;
           }
         );
       },

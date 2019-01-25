@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as Config from '../../config';
+import { Platform } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -11,19 +12,40 @@ export class AuthenticationService {
 
   constructor(
     public nativeStorage: NativeStorage,
+    private platform: Platform,
     public http: HttpClient
   ){}
 
-  async getUser(){
-    return this.nativeStorage.getItem('User');
+  getUser(){
+    if (this.platform.is('cordova')) {
+      return this.nativeStorage.getItem('User');
+    } else {
+      return new Promise<any>((resolve, reject) => {
+        debugger
+        let user = window.localStorage.getItem('User');
+        resolve(JSON.parse(user));
+      })
+    }
   }
 
   setUser(user){
-    return this.nativeStorage.setItem('User', user);
+    if (this.platform.is('cordova')) {
+      this.nativeStorage.setItem('User', user);
+    } else {
+      debugger
+      window.localStorage.setItem('User', JSON.stringify(user));
+    }
   }
 
   logOut(){
-    return this.nativeStorage.clear();
+    if (this.platform.is('cordova')) {
+      return this.nativeStorage.clear();
+    } else {
+      return new Promise<any>((resolve, reject) => {
+        window.localStorage.clear();
+        resolve()
+      })
+    }
   }
 
   doLogin(username, password){
@@ -40,8 +62,7 @@ export class AuthenticationService {
   }
 
   validateAuthToken(token){
-    let header : HttpHeaders = new HttpHeaders();
-    header.append('Authorization','Basic ' + token);
+    let header : HttpHeaders = new HttpHeaders().append('Authorization','Basic ' + token);
     return this.http.post(Config.WORDPRESS_URL + 'wp-json/jwt-auth/v1/token/validate?token=' + token,
       {}, {headers: header})
   }

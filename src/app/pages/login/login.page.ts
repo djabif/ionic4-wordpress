@@ -25,10 +25,10 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.login_form = this.formBuilder.group({
-      username: new FormControl('', Validators.compose([
+      username: new FormControl('IamDemo', Validators.compose([
         Validators.required
       ])),
-      password: new FormControl('', Validators.required)
+      password: new FormControl('iamdemo', Validators.required)
     });
   }
 
@@ -50,7 +50,7 @@ export class LoginPage implements OnInit {
      },
      err => {
        loading.dismiss();
-       this.error_message = "Invalid credentials. Try with username 'aa' password 'aa'.";
+       this.error_message = "Invalid credentials.";
        console.log(err);
      })
   }

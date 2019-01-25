@@ -30,6 +30,7 @@
       <ion-input type="password" formControlName="password"></ion-input>
     </ion-item>
     <br>
+    <p class="error_message" *ngIf="error_message">{{error_message}}</p>
     <ion-button expand="block" type="submit" [disabled]="!register_form.valid">Submit</ion-button>
   </form>
 </ion-content>
