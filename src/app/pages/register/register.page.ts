@@ -28,8 +28,8 @@ export class RegisterPage implements OnInit {
   }
 
   onSubmit(values){
-    var username = 'envato@startapplabs.com'; // this should be an administrator Username
-    var password = 'KeepShipping!'; // this should be an administrator Password
+    var username = 'YOUR_USER_NAME'; // this should be an administrator Username
+    var password = 'YOUR_PASSWORD'; // this should be an administrator Password
     //only authenticated administrators can create users
     this.authenticationService.doLogin(username, password)
     .subscribe(

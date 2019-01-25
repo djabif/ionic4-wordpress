@@ -17,7 +17,7 @@ export class WordpressService {
   }
 
   getRecentPosts(categoryId:number, page:number = 1){
-    //if we want to query posts by category
+    // if we want to query posts by category
     let category_url = categoryId? ("&categories=" + categoryId): "";
 
     return this.http.get(
