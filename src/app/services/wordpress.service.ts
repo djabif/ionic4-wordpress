@@ -51,7 +51,6 @@ export class WordpressService {
   }
 
   createComment(postId, user, comment){
-    debugger
     let header: HttpHeaders = new HttpHeaders().append('Authorization', 'Bearer ' + user.token);
     return this.http.post(Config.WORDPRESS_REST_API_URL + "comments?token=" + user.token, {
       author_name: user.displayname,

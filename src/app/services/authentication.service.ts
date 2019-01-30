@@ -21,7 +21,6 @@ export class AuthenticationService {
       return this.nativeStorage.getItem('User');
     } else {
       return new Promise<any>((resolve, reject) => {
-        debugger
         let user = window.localStorage.getItem('User');
         resolve(JSON.parse(user));
       })
@@ -62,7 +61,7 @@ export class AuthenticationService {
   }
 
   validateAuthToken(token){
-    let header : HttpHeaders = new HttpHeaders().append('Authorization','Basic ' + token);
+    let header : HttpHeaders = new HttpHeaders({'Authorization': 'Bearer ' + token});
     return this.http.post(Config.WORDPRESS_URL + 'wp-json/jwt-auth/v1/token/validate?token=' + token,
       {}, {headers: header})
   }
