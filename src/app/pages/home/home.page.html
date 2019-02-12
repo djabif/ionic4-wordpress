@@ -21,7 +21,7 @@
     <ion-card-content >
       <p [innerHTML]="post.excerpt.rendered"></p>
     </ion-card-content>
-    <ion-row no-padding>
+    <ion-row>
        <ion-col>
          <ion-button fill="clear" size="small" color="primary" icon-start>
            {{post.date.split('T')[0]}}
@@ -34,7 +34,6 @@
        </ion-col>
      </ion-row>
   </ion-card>
-  <!-- <ion-infinite-scroll [disabled]="!morePagesAvailable" (ionInfinite)="doInfinite($event)"> -->
   <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content
     loadingSpinner="bubbles"
